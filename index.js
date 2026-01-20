@@ -5,7 +5,7 @@ const axios = require("axios");
 const app = express();
 app.use(bodyParser.json());
 
-const VERIFY_TOKEN = "my_verify_token";
+const VERIFY_TOKEN = "verify12345";
 const TOKEN = process.env.WHATSAPP_TOKEN;
 
 // Webhook verification
@@ -46,7 +46,7 @@ app.post("/webhook", async (req, res) => {
             Authorization: `Bearer ${TOKEN}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
     }
 
