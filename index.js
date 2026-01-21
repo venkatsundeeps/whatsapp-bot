@@ -1,12 +1,12 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+
 const axios = require("axios");
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 
-const VERIFY_TOKEN = "vs_webhook_2026";
-const TOKEN = process.env.WHATSAPP_TOKEN;
+const VERIFY_TOKEN = "salon_verify_123"; // you will use this in Meta
+const TOKEN = process.env.WHATSAPP_TOKEN; // set this in Railway
 
 // Webhook verification
 app.get("/webhook", (req, res) => {
@@ -33,13 +33,16 @@ app.post("/webhook", async (req, res) => {
     if (message) {
       const from = message.from;
       const phoneNumberId = value.metadata.phone_number_id;
+      const text = message.text?.body;
+
+      console.log("Message received:", text);
 
       await axios.post(
         `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`,
         {
           messaging_product: "whatsapp",
           to: from,
-          text: { body: "Hi 👋 Your WhatsApp bot is now live!" },
+          text: { body: "Hi 👋 Your Salon bot is live!" },
         },
         {
           headers: {
@@ -52,7 +55,7 @@ app.post("/webhook", async (req, res) => {
 
     res.sendStatus(200);
   } catch (error) {
-    console.error(error.response?.data || error.message);
+    console.error("Error:", error.response?.data || error.message);
     res.sendStatus(500);
   }
 });
